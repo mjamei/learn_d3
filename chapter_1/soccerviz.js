@@ -31,7 +31,7 @@ function createSoccerViz() {
 		.append("text")
 		.style("text-anchor", "middle")
 		.attr("y", 30)
-		.style("font-size", "10px")
+		// .style("font-size", "10px")
 		.text(function(d) {return d.team;});
 	
 		var dataKeys = d3.keys(incomingData[0]).filter(function(el) {
@@ -53,7 +53,7 @@ function createSoccerViz() {
 			};
 		
 
-		teamG.on("mouseover", highlightRegion);
+		teamG.on("mouseover", highlightRegion2);
 		function highlightRegion(d) {
 			console.log("hover")
 			d3.selectAll("g.overallG")
@@ -62,12 +62,25 @@ function createSoccerViz() {
 		};
 
 		function highlightRegion2(d) {
-			d3.sele
+			d3.select(this).select("text").classed("active", true).attr("y", 10)
+			d3.selectAll("g.overallG").select("circle").each(function(p,i) {
+				console.log(d.region)
+				d.region == p.region ?
+					d3.select(this).classed("active", true) :
+					d3.select(this).classed("inactive", true);
+
+			});
+		};
+
+		function unhighlight() {
+			d3.selectAll("g.overallG").select("circle").attr("class", "")
+			d3.selectAll("g.overallG").select("text").classed("active", false).attr("y", 30)
 		}
 
-		teamG.on("mouseout", function() {
-			d3.selectAll("g.overallG").select("circle").style("fill","pink")
-		})
+		// teamG.on("mouseout", function() {
+		// 	d3.selectAll("g.overallG").select("circle").style("fill","pink")
+		// })
+		teamG.on("mouseout", unhighlight)
 
 		d3.select("circle").each(function(d, i) {
 			console.log(d); console.log(i), console.log(this);
